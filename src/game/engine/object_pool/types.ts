@@ -4,3 +4,5 @@ export interface IObjectPool<T extends object> {
   reserve(x: number): void;
   limit(x: number): void;
 }
+
+export type NewObjFunc<T extends object> = () => T;

@@ -1,5 +1,5 @@
 import { Bitmap } from "bitmap-index";
-import { NewObjFunc, ObjectPool } from "../object_pool/object_pool";
+import { NewObjFunc, ObjectPool } from "../object_pool";
 import {
   BasicComponent,
   IComponentsManager,

@@ -1,6 +1,6 @@
-import { IObjectPool } from "./types";
+import { IObjectPool, NewObjFunc } from "./types";
 
-export type NewObjFunc<T extends object> = () => T;
+
 
 type ObjectPoolConstructor<T extends object> = {
   newFunc: NewObjFunc<T>;
