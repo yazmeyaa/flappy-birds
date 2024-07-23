@@ -4,7 +4,7 @@ import { IWorld, World } from "../world";
 
 export class GameCore {
   public world: IWorld = new World();
-  public renderer: IRenderer = new Renderer();
+  public renderer: IRenderer = new Renderer(this.world);
 
   constructor() {
     this.world.timer.add(() => {

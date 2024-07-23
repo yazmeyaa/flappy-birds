@@ -7,6 +7,7 @@ import { PositionComponent } from "./game/components/position";
 import { FlappyBirdComponent } from "./game/components/flappy_bird";
 import { MovementSystem } from "./game/systems/movement";
 import { GravitySystem } from "./game/systems/gravity";
+import { IWorld } from "./game/engine/world";
 
 const game = new GameCore();
 game.world.systems.register(new MovementSystem());
@@ -35,9 +36,9 @@ const bird = FlappyBirdEntity.addEntity(game.world);
 
 class MainMenuScene extends BasicScene {
   public name: string = "main menu";
-  public onMount(): void {
+  public onMount(world: IWorld): void {
     const rect = new Graphics().rect(20, 20, 20, 20);
-    game.world.timer.add(() => {
+    world.timer.add(() => {
       rect.x = bird.position.x;
       rect.y = bird.position.y;
     });

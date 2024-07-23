@@ -1,5 +1,5 @@
 import { Bitmap } from "bitmap-index";
-import { NewObjFunc } from "../object_pool/object_pool";
+import { NewObjFunc } from "../object_pool";
 
 export type Id = number;
 

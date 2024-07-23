@@ -1,5 +1,6 @@
 import { BasicScene } from "./types";
 import { SceneManager } from "./scene_manager";
+import { IWorld, World } from "../world";
 
 class MockScene extends BasicScene {
   public name = "MockScene";
@@ -10,9 +11,11 @@ class MockScene extends BasicScene {
 describe("SceneManager", () => {
   let sceneManager: SceneManager;
   let mockScene: MockScene;
+  let world: IWorld
 
   beforeEach(() => {
-    sceneManager = new SceneManager();
+    world = new World();
+    sceneManager = new SceneManager(world);
     mockScene = new MockScene();
   });
 

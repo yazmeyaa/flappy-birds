@@ -1,4 +1,5 @@
 import { Container, ContainerChild } from "pixi.js";
+import { IWorld } from "../world";
 
 export interface IRenderer {
   scenes: ISceneManager;
@@ -16,6 +17,6 @@ export interface ISceneManager {
 export abstract class BasicScene {
   public container: Container<ContainerChild> = new Container();
   public abstract name: string;
-  public abstract onMount(): void;
-  public abstract onUnmount(): void;
+  public abstract onMount(world: IWorld): void;
+  public abstract onUnmount(world: IWorld): void;
 }

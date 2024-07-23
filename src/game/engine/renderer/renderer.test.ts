@@ -1,3 +1,4 @@
+import { IWorld, World } from "../world";
 import { Renderer } from "./renderer";
 import { BasicScene } from "./types";
 
@@ -27,9 +28,11 @@ class TestScene extends BasicScene {
 describe("Renderer", () => {
   let renderer: Renderer;
   let testScene: TestScene;
+  let world: IWorld;
 
   beforeEach(() => {
-    renderer = new Renderer();
+    world = new World();
+    renderer = new Renderer(world);
     testScene = new TestScene();
     renderer.scenes.addScene(testScene);
   });
