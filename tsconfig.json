@@ -24,7 +24,7 @@
     /* Path alias */
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
+      "@/src/*": ["./src/*"],
       "@/engine/*": ["./src/game/engine/*"],
       "@/entities/*": ["./src/game/entities/*"],
       "@/components/*": ["./src/game/components/*"],

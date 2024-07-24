@@ -6,7 +6,7 @@ const root = resolve(__dirname, "src");
 export default defineConfig({
   resolve: {
     alias: {
-      "@/": resolve(root),
+      "@/src": resolve(root),
       "@/engine": resolve(root, "game", "engine"),
       "@/entities": resolve(root, "game", "entities"),
       "@/components": resolve(root, "game", "components"),
