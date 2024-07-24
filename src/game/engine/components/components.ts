@@ -1,6 +1,7 @@
 import { Bitmap } from "bitmap-index";
 import { NewObjFunc, ObjectPool } from "../object_pool";
 import {
+  AbstractBasicComponent,
   BasicComponent,
   IComponentsManager,
   IComponentStorage,
@@ -11,7 +12,7 @@ export class ComponentsManager implements IComponentsManager {
   private stores: Map<string, ComponentsStorage<any>> = new Map();
 
   public getStorage<C extends BasicComponent>(
-    component: typeof BasicComponent
+    component:  AbstractBasicComponent
   ): IComponentStorage<C> {
     return this.stores.get(component.component_name) as IComponentStorage<C>;
   }
