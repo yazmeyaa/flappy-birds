@@ -1,0 +1,1 @@
+export const COLLISION_DETECT_EVENT_NAME = 'collision_detect';

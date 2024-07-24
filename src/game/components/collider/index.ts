@@ -1,0 +1,1 @@
+export { Collidable } from "./collider";
