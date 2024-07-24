@@ -19,7 +19,18 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+
+    /* Path alias */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@/engine/*": ["./src/game/engine/*"],
+      "@/entities/*": ["./src/game/entities*"],
+      "@/components/*": ["./src/game/components/*"],
+      "@/systems/*": ["./src/game/systems/*"],
+      "@/assets/*": ["./src/game/assets/*"],
+    }
   },
   "include": ["src"]
 }
