@@ -3,9 +3,13 @@ import { NewObjFunc } from "../object_pool";
 
 export type Id = number;
 
+export interface AbstractBasicComponent {
+  component_name: string
+}
+
 export interface IComponentsManager {
   getStorage<C extends BasicComponent>(
-    component: typeof BasicComponent
+    component: AbstractBasicComponent
   ): IComponentStorage<C>;
   registerStorage<C extends BasicComponent>(
     component: typeof BasicComponent,
@@ -21,5 +25,5 @@ export interface IComponentStorage<C extends BasicComponent> {
 }
 
 export abstract class BasicComponent {
-  static component_name: string;
+  static readonly component_name: string;
 }
