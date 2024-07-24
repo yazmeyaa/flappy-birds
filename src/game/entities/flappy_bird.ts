@@ -1,3 +1,5 @@
+import { Appearance } from "../components/appearance";
+import { BoundingBoxComponent } from "../components/bounding_box";
 import { FlappyBirdComponent } from "../components/flappy_bird";
 import { MovementComponent } from "../components/movement/movement";
 import { PositionComponent } from "../components/position";
@@ -8,17 +10,21 @@ export type FlappyBirdConstructorType = {
   id: Id;
   position: PositionComponent;
   movement: MovementComponent;
+  boundingBox: BoundingBoxComponent;
 };
 
 export class FlappyBirdEntity {
   public readonly id: Id;
   public position: PositionComponent;
   public movement: MovementComponent;
+  public boundingBox: BoundingBoxComponent;
+  public appearance: Appearance = new Appearance();
 
   constructor(bird: FlappyBirdConstructorType) {
     this.id = bird.id;
     this.movement = bird.movement;
     this.position = bird.position;
+    this.boundingBox = bird.boundingBox;
   }
 
   static addEntity(world: IWorld): FlappyBirdEntity {
@@ -29,11 +35,14 @@ export class FlappyBirdEntity {
     const movement = world.components
       .getStorage<MovementComponent>(MovementComponent)
       .add(id);
+    const boundingBox = world.components
+      .getStorage<BoundingBoxComponent>(BoundingBoxComponent)
+      .add(id);
     world.components
       .getStorage<FlappyBirdComponent>(FlappyBirdComponent)
       .add(id);
 
-    return new FlappyBirdEntity({ id, movement, position });
+    return new FlappyBirdEntity({ id, movement, position, boundingBox });
   }
 
   static getFromStore(world: IWorld, id: Id): FlappyBirdEntity | null {
@@ -48,7 +57,10 @@ export class FlappyBirdEntity {
     const movement = world.components
       .getStorage<MovementComponent>(MovementComponent)
       .get(id)!;
+    const boundingBox = world.components
+      .getStorage<BoundingBoxComponent>(BoundingBoxComponent)
+      .get(id)!;
 
-    return new FlappyBirdEntity({ id, position, movement });
+    return new FlappyBirdEntity({ id, position, movement, boundingBox });
   }
 }

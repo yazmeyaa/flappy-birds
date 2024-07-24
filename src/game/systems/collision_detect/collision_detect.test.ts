@@ -1,4 +1,4 @@
-import { BoundingBox } from "../../components/bounding_box";
+import { BoundingBoxComponent } from "../../components/bounding_box";
 import { Collidable } from "../../components/collider";
 import { World } from "../../engine/world";
 import { CollisionDetectSystem } from "./collision_detect";
@@ -16,12 +16,12 @@ describe("Test CollisionSystem", () => {
     const world = new World();
     world.systems.register(new CollisionDetectSystem());
     world.components.registerStorage(
-      BoundingBox,
-      () => new BoundingBox(0, 0, 0, 0)
+      BoundingBoxComponent,
+      () => new BoundingBoxComponent(0, 0, 0, 0)
     );
     world.components.registerStorage(Collidable, () => new Collidable());
 
-    const bboxStore = world.components.getStorage<BoundingBox>(BoundingBox);
+    const bboxStore = world.components.getStorage<BoundingBoxComponent>(BoundingBoxComponent);
 
     /* ______________ SETUP ENTITIES ______________ */
 
@@ -65,11 +65,11 @@ describe("Test CollisionSystem", () => {
     const world = new World();
     world.systems.register(new CollisionDetectSystem());
     world.components.registerStorage(
-      BoundingBox,
-      () => new BoundingBox(0, 0, 0, 0)
+      BoundingBoxComponent,
+      () => new BoundingBoxComponent(0, 0, 0, 0)
     );
 
-    const bboxStore = world.components.getStorage<BoundingBox>(BoundingBox);
+    const bboxStore = world.components.getStorage<BoundingBoxComponent>(BoundingBoxComponent);
 
     /* ______________ SETUP ENTITIES ______________ */
 

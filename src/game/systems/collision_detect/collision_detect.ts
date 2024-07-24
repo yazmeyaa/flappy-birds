@@ -1,6 +1,6 @@
 import { System } from "../../engine/systems";
 import { IWorld } from "../../engine/world";
-import { BoundingBox } from "../../components/bounding_box";
+import { BoundingBoxComponent } from "../../components/bounding_box";
 import { COLLISION_DETECT_EVENT_NAME } from "./consts";
 import { CollisionEvent } from "./types";
 import { PriorityCategories } from "../../engine/systems/consts";
@@ -8,7 +8,7 @@ import { PriorityCategories } from "../../engine/systems/consts";
 export class CollisionDetectSystem extends System {
   public name: string = "collision_system";
 
-  public priority: number = PriorityCategories.PHYSICS;
+  public priority: number = PriorityCategories.PHYSICS + 10;
 
   constructor() {
     super();
@@ -21,9 +21,9 @@ export class CollisionDetectSystem extends System {
    */
   private getStores(world: IWorld) {
     const boundingBoxStorage =
-      world.components.getStorage<BoundingBox>(BoundingBox);
+      world.components.getStorage<BoundingBoxComponent>(BoundingBoxComponent);
     const collidableStorage =
-      world.components.getStorage<BoundingBox>(BoundingBox);
+      world.components.getStorage<BoundingBoxComponent>(BoundingBoxComponent);
     return { boundingBoxStorage, collidableStorage };
   }
 
@@ -33,7 +33,7 @@ export class CollisionDetectSystem extends System {
    * @param box2 - The second bounding box.
    * @returns True if the bounding boxes intersect, otherwise false.
    */
-  private aabbIntersects(box1: BoundingBox, box2: BoundingBox): boolean {
+  private aabbIntersects(box1: BoundingBoxComponent, box2: BoundingBoxComponent): boolean {
     return (
       box1.right > box2.left &&
       box1.left < box2.right &&

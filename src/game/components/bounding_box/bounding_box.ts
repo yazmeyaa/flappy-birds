@@ -1,6 +1,6 @@
 import { BasicComponent } from "../../engine/components";
 
-export class BoundingBox extends BasicComponent {
+export class BoundingBoxComponent extends BasicComponent {
   public static component_name: string = "bounding_box";
   public left: number;
   public top: number;

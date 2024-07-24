@@ -8,10 +8,22 @@ import { FlappyBirdComponent } from "./game/components/flappy_bird";
 import { MovementSystem } from "./game/systems/movement";
 import { GravitySystem } from "./game/systems/gravity";
 import { IWorld } from "./game/engine/world";
+import { Appearance } from "./game/components/appearance";
+import { BoundingBoxComponent } from "./game/components/bounding_box";
+import { Collidable } from "./game/components/collider";
+import {
+  COLLISION_DETECT_EVENT_NAME,
+  CollisionDetectSystem,
+  CollisionPayload,
+} from "./game/systems/collision_detect";
+import { BindBoundingBoxSystem } from "./game/systems/bind_bounding_box";
+import { Pipe } from "./game/entities/pipe";
 
 const game = new GameCore();
 game.world.systems.register(new MovementSystem());
 game.world.systems.register(new GravitySystem());
+game.world.systems.register(new CollisionDetectSystem());
+game.world.systems.register(new BindBoundingBoxSystem());
 
 game.world.components.registerStorage(
   PositionComponent,
@@ -25,6 +37,12 @@ game.world.components.registerStorage(
   FlappyBirdComponent,
   () => new FlappyBirdComponent()
 );
+game.world.components.registerStorage(Appearance, () => new Appearance());
+game.world.components.registerStorage(
+  BoundingBoxComponent,
+  () => new BoundingBoxComponent(0, 0, 20, 20)
+);
+game.world.components.registerStorage(Collidable, () => new Collidable());
 
 const container = document.createElement("div");
 container.style.cssText = `display: block;
@@ -32,20 +50,64 @@ max-width: 800px;
 max-height: 600px;
 `;
 
-const bird = FlappyBirdEntity.addEntity(game.world);
-
 class MainMenuScene extends BasicScene {
   public name: string = "main menu";
   public onMount(world: IWorld): void {
-    const rect = new Graphics().rect(20, 20, 20, 20);
+    const bird = FlappyBirdEntity.addEntity(game.world);
+    bird.position.x = 0;
+    bird.position.y = 0;
+    bird.boundingBox.left = bird.position.x;
+    bird.boundingBox.top = bird.position.y;
+
+    const obstacle = Pipe.register(world);
+
+    obstacle.position.x = 0;
+    obstacle.position.y = 100;
+    obstacle.boundlingBox.top = obstacle.position.y;
+    obstacle.boundlingBox.left = obstacle.position.x;
+    obstacle.boundlingBox.width = 100;
+    obstacle.boundlingBox.height = 20;
+    obstacle.appearance.color = "green";
+
+    world.events.subscribe<CollisionPayload>(
+      COLLISION_DETECT_EVENT_NAME,
+      () => {
+        bird.appearance.color = "orange";
+      }
+    );
+
+    const obstacleRect = new Graphics().rect(
+      obstacle.position.x,
+      obstacle.position.y,
+      obstacle.boundlingBox.width,
+      obstacle.boundlingBox.height
+    );
+    const rect = new Graphics().rect(
+      bird.position.x,
+      bird.position.y,
+      bird.boundingBox.width,
+      bird.boundingBox.height
+    );
+    rect.label = "flappy";
     world.timer.add(() => {
-      rect.x = bird.position.x;
-      rect.y = bird.position.y;
+      rect.clear();
+      rect.rect(
+        bird.position.x,
+        bird.position.y,
+        bird.boundingBox.width,
+        bird.boundingBox.height
+      );
+      rect.fillStyle = bird.appearance.color;
+      rect.fill();
     });
-    rect.fillStyle = "red";
+
+    rect.fillStyle = "orange";
+    obstacleRect.fillStyle = obstacle.appearance.color;
+    obstacleRect.fill();
     rect.fill();
 
     this.container.addChild(rect);
+    this.container.addChild(obstacleRect);
   }
   public onUnmount(): void {}
 }
@@ -53,8 +115,8 @@ class MainMenuScene extends BasicScene {
 document.body.appendChild(container);
 
 game.renderer.appendTo(container).then(() => {
-  game.world.start();
   const mainMenuScene = new MainMenuScene();
   game.renderer.scenes.addScene(mainMenuScene);
   game.renderer.scenes.changeScene(mainMenuScene.name);
+  game.world.start();
 });

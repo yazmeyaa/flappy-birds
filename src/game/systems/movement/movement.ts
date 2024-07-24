@@ -1,11 +1,12 @@
 import { MovementComponent } from "../../components/movement";
 import { PositionComponent } from "../../components/position";
 import { System } from "../../engine/systems";
+import { PriorityCategories } from "../../engine/systems/consts";
 import { IWorld } from "../../engine/world";
 
 export class MovementSystem extends System {
   public name: string = "movement_system";
-  public priority: number = 1;
+  public priority: number = PriorityCategories.PHYSICS + 50;
 
   constructor() {
     super();

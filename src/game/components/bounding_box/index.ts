@@ -1,1 +1,1 @@
-export { BoundingBox } from "./bounding_box";
+export { BoundingBoxComponent } from "./bounding_box";
