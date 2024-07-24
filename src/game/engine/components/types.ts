@@ -12,7 +12,7 @@ export interface IComponentsManager {
     component: AbstractBasicComponent
   ): IComponentStorage<C>;
   registerStorage<C extends BasicComponent>(
-    component: typeof BasicComponent,
+    component: AbstractBasicComponent,
     newFunc: NewObjFunc<C>
   ): void;
 }

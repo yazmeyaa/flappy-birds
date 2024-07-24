@@ -64,4 +64,4 @@ export const PriorityCategories = {
      * @type {number}
      */
     POST_RENDER: 800
-};
+} as const;

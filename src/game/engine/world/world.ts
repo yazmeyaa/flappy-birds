@@ -1,5 +1,6 @@
 import { ComponentsManager } from "../components";
 import { IComponentsManager, Id } from "../components/types";
+import { EventManager, IEventManager } from "../events";
 import { SystemManager } from "../systems/systems";
 import { ISystemsManager } from "../systems/types";
 import { Timer } from "../timer";
@@ -8,6 +9,7 @@ import { IWorld } from "./types";
 export class World implements IWorld {
   public components: IComponentsManager;
   public systems: ISystemsManager;
+  public events: IEventManager;
   private idCount = 0;
   public timer: Timer;
 
@@ -15,7 +17,8 @@ export class World implements IWorld {
     this.components = new ComponentsManager();
     this.systems = new SystemManager();
     this.timer = new Timer();
-
+    this.events = new EventManager();
+    
     this.timer.add(() => {
       this.update();
     });

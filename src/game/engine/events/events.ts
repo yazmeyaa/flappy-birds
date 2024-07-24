@@ -11,7 +11,7 @@ export class EventManager implements IEventManager {
     }
   }
 
-  public subscribe<T extends object>(
+  public subscribe<T extends any>(
     eventName: string,
     cb: EventListenerType<T>
   ): void {
