@@ -26,7 +26,7 @@
     "paths": {
       "@/*": ["./src/*"],
       "@/engine/*": ["./src/game/engine/*"],
-      "@/entities/*": ["./src/game/entities*"],
+      "@/entities/*": ["./src/game/entities/*"],
       "@/components/*": ["./src/game/components/*"],
       "@/systems/*": ["./src/game/systems/*"],
       "@/assets/*": ["./src/game/assets/*"],
