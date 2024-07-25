@@ -4,7 +4,7 @@ import { NewObjFunc } from "../object_pool";
 export type Id = number;
 
 export interface AbstractBasicComponent {
-  component_name: string
+  component_name: string;
 }
 
 export interface IComponentsManager {
@@ -25,5 +25,5 @@ export interface IComponentStorage<C extends BasicComponent> {
 }
 
 export abstract class BasicComponent {
-  static readonly component_name: string;
+  static component_name: string;
 }

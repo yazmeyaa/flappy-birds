@@ -1,7 +1,7 @@
 import { BasicComponent } from "../../engine/components";
 
 export class BoundingBoxComponent extends BasicComponent {
-  public static component_name: string = "bounding_box";
+  public static readonly component_name = "bounding_box";
   public left: number;
   public top: number;
   public width: number;
