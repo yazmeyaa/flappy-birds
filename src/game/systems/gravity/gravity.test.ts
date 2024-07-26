@@ -1,3 +1,4 @@
+import { GravityObjectComponent } from "../../components/gravity_object";
 import { MovementComponent } from "../../components/movement";
 import { PositionComponent } from "../../components/position";
 import { World } from "../../engine/world";
@@ -22,6 +23,10 @@ describe("Test GravitySystem", () => {
     world.components.registerStorage(
       MovementComponent,
       () => new MovementComponent()
+    );
+    world.components.registerStorage(
+      GravityObjectComponent,
+      () => new GravityObjectComponent()
     );
 
     const posStore =

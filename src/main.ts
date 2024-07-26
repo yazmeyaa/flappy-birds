@@ -18,6 +18,7 @@ import {
 } from "./game/systems/collision_detect";
 import { BindBoundingBoxSystem } from "./game/systems/bind_bounding_box";
 import { Pipe } from "./game/entities/pipe";
+import { GravityObjectComponent } from "./game/components/gravity_object";
 
 const game = new GameCore();
 game.world.systems.register(new MovementSystem());
@@ -43,6 +44,10 @@ game.world.components.registerStorage(
   () => new BoundingBoxComponent(0, 0, 20, 20)
 );
 game.world.components.registerStorage(Collidable, () => new Collidable());
+game.world.components.registerStorage(
+  GravityObjectComponent,
+  () => new GravityObjectComponent()
+);
 
 const container = document.createElement("div");
 container.style.cssText = `display: block;
@@ -56,15 +61,15 @@ class MainMenuScene extends BasicScene {
 
   public onMount(world: IWorld): void {
     const bird = new FlappyBird();
+    const obstacle = new Pipe();
     this.bird = bird;
     bird.init(world);
+    obstacle.init(world);
 
     bird.position.x = 0;
     bird.position.y = 0;
     bird.boundingBox.left = bird.position.x;
     bird.boundingBox.top = bird.position.y;
-
-    const obstacle = Pipe.register(world);
 
     obstacle.position.x = 0;
     obstacle.position.y = 100;
@@ -104,6 +109,18 @@ class MainMenuScene extends BasicScene {
       );
       rect.fillStyle = bird.appearance.color;
       rect.fill();
+    });
+
+    world.timer.add(() => {
+      obstacleRect.clear();
+      obstacleRect.rect(
+        obstacle.position.x,
+        obstacle.position.y,
+        obstacle.boundlingBox.width,
+        obstacle.boundlingBox.height
+      );
+      obstacleRect.fillStyle = obstacle.appearance.color;
+      obstacleRect.fill();
     });
 
     rect.fillStyle = "orange";
