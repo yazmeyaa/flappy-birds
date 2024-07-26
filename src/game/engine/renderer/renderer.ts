@@ -21,7 +21,5 @@ export class Renderer implements IRenderer {
     const currentScene = this.scenes.activeScene();
     if (!currentScene) return;
     this.app.stage = currentScene.container;
-
-    this.app.render();
   }
 }

@@ -59,46 +59,74 @@ class MainMenuScene extends BasicScene {
   public name: string = "main menu";
   private bird: FlappyBird | null = null;
 
-  public onMount(world: IWorld): void {
-    const bird = new FlappyBird();
-    const obstacle = new Pipe();
-    this.bird = bird;
-    bird.init(world);
-    obstacle.init(world);
+  private createPipe(world: IWorld): Pipe {
+    const pipe = new Pipe();
+    pipe.init(world);
 
-    bird.position.x = 0;
+    pipe.position.x = 0;
+    pipe.position.y = 100;
+    pipe.boundlingBox.top = pipe.position.y;
+    pipe.boundlingBox.left = pipe.position.x;
+    pipe.boundlingBox.width = 100;
+    pipe.boundlingBox.height = 20;
+    pipe.appearance.color = "green";
+
+    return pipe;
+  }
+
+  private createBird(world: IWorld): FlappyBird {
+    const bird = new FlappyBird();
+    bird.init(world);
+
+    bird.position.x = 30;
     bird.position.y = 0;
     bird.boundingBox.left = bird.position.x;
     bird.boundingBox.top = bird.position.y;
+    return bird;
+  }
 
-    obstacle.position.x = 0;
-    obstacle.position.y = 100;
-    obstacle.boundlingBox.top = obstacle.position.y;
-    obstacle.boundlingBox.left = obstacle.position.x;
-    obstacle.boundlingBox.width = 100;
-    obstacle.boundlingBox.height = 20;
-    obstacle.appearance.color = "green";
+  public onMount(world: IWorld): void {
+    const bird = this.createBird(world);
+    const pipe2 = this.createPipe(world);
+    pipe2.boundlingBox.width = 50;
+    pipe2.boundlingBox.height = 400;
+    pipe2.position.x = 400;
+    pipe2.position.y = 400;
+    this.bird = bird;
+
+    window.addEventListener("mousedown", () => {
+      bird.movement.velocity.setY(-5.3);
+      bird.movement.acceleration.setY(0);
+    });
 
     world.events.subscribe<CollisionPayload>(
       COLLISION_DETECT_EVENT_NAME,
-      () => {
-        bird.appearance.color = "orange";
+      (event) => {
+        if ([event.payload.entityA, event.payload.entityB].includes(bird.id)) {
+          bird.appearance.color = "orange";
+          alert("Game over!!!");
+
+          game.renderer.scenes.changeScene(this.name);
+        }
       }
     );
 
-    const obstacleRect = new Graphics().rect(
-      obstacle.position.x,
-      obstacle.position.y,
-      obstacle.boundlingBox.width,
-      obstacle.boundlingBox.height
+    const obstacleRect2 = new Graphics().rect(
+      pipe2.position.x,
+      pipe2.position.y,
+      pipe2.boundlingBox.width,
+      pipe2.boundlingBox.height
     );
+
+    pipe2.movement.velocity.setX(-3);
+
     const rect = new Graphics().rect(
       bird.position.x,
       bird.position.y,
       bird.boundingBox.width,
       bird.boundingBox.height
     );
-    rect.label = "flappy";
+
     world.timer.add(() => {
       rect.clear();
       rect.rect(
@@ -112,28 +140,29 @@ class MainMenuScene extends BasicScene {
     });
 
     world.timer.add(() => {
-      obstacleRect.clear();
-      obstacleRect.rect(
-        obstacle.position.x,
-        obstacle.position.y,
-        obstacle.boundlingBox.width,
-        obstacle.boundlingBox.height
+      if (pipe2.position.x + pipe2.boundlingBox.width <= 0) {
+        pipe2.position.x = 800 + pipe2.boundlingBox.width;
+      }
+      obstacleRect2.clear();
+      obstacleRect2.rect(
+        pipe2.position.x,
+        pipe2.position.y,
+        pipe2.boundlingBox.width,
+        pipe2.boundlingBox.height
       );
-      obstacleRect.fillStyle = obstacle.appearance.color;
-      obstacleRect.fill();
+      obstacleRect2.fillStyle = pipe2.appearance.color;
+      obstacleRect2.fill();
     });
 
-    rect.fillStyle = "orange";
-    obstacleRect.fillStyle = obstacle.appearance.color;
-    obstacleRect.fill();
-    rect.fill();
-
     this.container.addChild(rect);
-    this.container.addChild(obstacleRect);
+    this.container.addChild(obstacleRect2);
   }
   public onUnmount(world: IWorld): void {
-    this.bird?.movement.velocity.set(0, 0);
+    if (this.bird) {
+      this.bird.position.y = 300;
+    }
     this.bird?.movement.acceleration.set(0, 0);
+    this.bird?.movement.velocity.set(0, 0);
     this.bird?.destroy(world);
   }
 }
