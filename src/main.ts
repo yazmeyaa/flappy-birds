@@ -1,7 +1,7 @@
 import { Graphics } from "pixi.js";
 import { GameCore } from "./game/engine/core/core";
 import { BasicScene } from "./game/engine/renderer";
-import { FlappyBirdEntity } from "./game/entities/flappy_bird";
+import { FlappyBird } from "./game/entities/flappy_bird";
 import { MovementComponent } from "./game/components/movement";
 import { PositionComponent } from "./game/components/position";
 import { FlappyBirdComponent } from "./game/components/flappy_bird";
@@ -52,8 +52,13 @@ max-height: 600px;
 
 class MainMenuScene extends BasicScene {
   public name: string = "main menu";
+  private bird: FlappyBird | null = null;
+
   public onMount(world: IWorld): void {
-    const bird = FlappyBirdEntity.addEntity(game.world);
+    const bird = new FlappyBird();
+    this.bird = bird;
+    bird.init(world);
+
     bird.position.x = 0;
     bird.position.y = 0;
     bird.boundingBox.left = bird.position.x;
@@ -109,7 +114,11 @@ class MainMenuScene extends BasicScene {
     this.container.addChild(rect);
     this.container.addChild(obstacleRect);
   }
-  public onUnmount(): void {}
+  public onUnmount(world: IWorld): void {
+    this.bird?.movement.velocity.set(0, 0);
+    this.bird?.movement.acceleration.set(0, 0);
+    this.bird?.destroy(world);
+  }
 }
 
 document.body.appendChild(container);

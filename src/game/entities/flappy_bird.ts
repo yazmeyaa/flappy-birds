@@ -1,66 +1,45 @@
 import { Appearance } from "../components/appearance";
 import { BoundingBoxComponent } from "../components/bounding_box";
-import { FlappyBirdComponent } from "../components/flappy_bird";
+import { Collidable } from "../components/collider";
 import { MovementComponent } from "../components/movement/movement";
 import { PositionComponent } from "../components/position";
 import { Id } from "../engine/components";
+import { BaseEntity, Component } from "../engine/entities";
 import { IWorld } from "../engine/world";
+import {
+  COLLISION_DETECT_EVENT_NAME,
+  CollisionPayload,
+} from "../systems/collision_detect";
 
-export type FlappyBirdConstructorType = {
-  id: Id;
-  position: PositionComponent;
-  movement: MovementComponent;
-  boundingBox: BoundingBoxComponent;
-};
+export class FlappyBird extends BaseEntity {
+  @Component(MovementComponent)
+  public movement!: MovementComponent;
 
-export class FlappyBirdEntity {
-  public readonly id: Id;
-  public position: PositionComponent;
-  public movement: MovementComponent;
-  public boundingBox: BoundingBoxComponent;
-  public appearance: Appearance = new Appearance();
+  @Component(PositionComponent)
+  public position!: PositionComponent;
 
-  constructor(bird: FlappyBirdConstructorType) {
-    this.id = bird.id;
-    this.movement = bird.movement;
-    this.position = bird.position;
-    this.boundingBox = bird.boundingBox;
-  }
+  @Component(BoundingBoxComponent)
+  public boundingBox!: BoundingBoxComponent;
 
-  static addEntity(world: IWorld): FlappyBirdEntity {
-    const id = world.newId();
-    const position = world.components
-      .getStorage<PositionComponent>(PositionComponent)
-      .add(id);
-    const movement = world.components
-      .getStorage<MovementComponent>(MovementComponent)
-      .add(id);
-    const boundingBox = world.components
-      .getStorage<BoundingBoxComponent>(BoundingBoxComponent)
-      .add(id);
-    world.components
-      .getStorage<FlappyBirdComponent>(FlappyBirdComponent)
-      .add(id);
+  @Component(Collidable)
+  public collidable!: Collidable;
 
-    return new FlappyBirdEntity({ id, movement, position, boundingBox });
-  }
+  @Component(Appearance)
+  public appearance!: Appearance;
 
-  static getFromStore(world: IWorld, id: Id): FlappyBirdEntity | null {
-    const entityExist = world.components
-      .getStorage<FlappyBirdComponent>(FlappyBirdComponent)
-      .has(id);
-    if (!entityExist) return null;
+  public override init(world: IWorld) {
+    super.init(world);
 
-    const position = world.components
-      .getStorage<PositionComponent>(PositionComponent)
-      .get(id)!;
-    const movement = world.components
-      .getStorage<MovementComponent>(MovementComponent)
-      .get(id)!;
-    const boundingBox = world.components
-      .getStorage<BoundingBoxComponent>(BoundingBoxComponent)
-      .get(id)!;
-
-    return new FlappyBirdEntity({ id, position, movement, boundingBox });
+    world.events.subscribe<CollisionPayload>(
+      COLLISION_DETECT_EVENT_NAME,
+      (event) => {
+        if (
+          event.payload.entityA === this.id ||
+          event.payload.entityB === this.id
+        ) {
+          console.log("I collided with something!!!");
+        }
+      }
+    );
   }
 }

@@ -14,12 +14,15 @@
     "moduleDetection": "force",
     "noEmit": true,
     "esModuleInterop": true,
+    "types": ["reflect-metadata", "@jest/globals", "@types/jest"],
 
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
 
     /* Path alias */
     "baseUrl": ".",
@@ -29,7 +32,7 @@
       "@/entities/*": ["./src/game/entities/*"],
       "@/components/*": ["./src/game/components/*"],
       "@/systems/*": ["./src/game/systems/*"],
-      "@/assets/*": ["./src/game/assets/*"],
+      "@/assets/*": ["./src/game/assets/*"]
     }
   },
   "include": ["src"]

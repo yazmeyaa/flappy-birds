@@ -1,2 +1,1 @@
-export { Entity, createEntity } from "./entities";
-export type { ComponentConfig } from "./types";
+export { BaseEntity, Component } from "./entities";
