@@ -1,4 +1,5 @@
 import { IWorld } from "../world";
+import { SCENE_CHANGED_EVENT_NAME } from "./consts";
 import { BasicScene, ISceneManager } from "./types";
 
 export class SceneManager implements ISceneManager {
@@ -18,7 +19,6 @@ export class SceneManager implements ISceneManager {
     this.scenesMap.delete(name);
   }
   changeScene(name: string): void {
-    this.world.pause()
     this.currentScene?.onUnmount(this.world);
     if (!this.scenesMap.has(name)) {
       throw new Error(
@@ -27,7 +27,9 @@ export class SceneManager implements ISceneManager {
     }
     this.currentScene = this.scenesMap.get(name)!;
     this.currentScene.onMount(this.world);
-    this.world.start()
+    this.world.events.emit(SCENE_CHANGED_EVENT_NAME, {
+      payload: {}
+    });
   }
   activeScene(): BasicScene | null {
     return this.currentScene;

@@ -20,3 +20,8 @@ export abstract class BasicScene {
   public abstract onMount(world: IWorld): void;
   public abstract onUnmount(world: IWorld): void;
 }
+
+export type SceneChangedEventPayload = {
+  prev: null | BasicScene;
+  current: null | BasicScene;
+};

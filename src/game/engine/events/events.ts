@@ -1,4 +1,4 @@
-import { Event, EventListenerType, IEventManager } from "./types";
+import { Event, EventListenerType, IEventManager, KnownEvent } from "./types";
 
 export class EventManager implements IEventManager {
   private listeners: Map<string, EventListenerType<any>[]> = new Map();
@@ -7,12 +7,15 @@ export class EventManager implements IEventManager {
     if (!this.listeners.has(eventName)) return;
 
     for (const cb of this.listeners.get(eventName)!) {
-      cb(event);
+      cb({
+        type: eventName,
+        payload: event.payload,
+      });
     }
   }
 
-  public subscribe<T extends any>(
-    eventName: string,
+  public subscribe<T>(
+    eventName: string | KnownEvent,
     cb: EventListenerType<T>
   ): void {
     if (!this.listeners.has(eventName)) this.listeners.set(eventName, []);

@@ -2,7 +2,6 @@ import { System } from "../../engine/systems";
 import { IWorld } from "../../engine/world";
 import { BoundingBoxComponent } from "../../components/bounding_box";
 import { COLLISION_DETECT_EVENT_NAME } from "./consts";
-import { CollisionEvent } from "./types";
 import { PriorityCategories } from "../../engine/systems/consts";
 
 export class CollisionDetectSystem extends System {
@@ -33,7 +32,10 @@ export class CollisionDetectSystem extends System {
    * @param box2 - The second bounding box.
    * @returns True if the bounding boxes intersect, otherwise false.
    */
-  private aabbIntersects(box1: BoundingBoxComponent, box2: BoundingBoxComponent): boolean {
+  private aabbIntersects(
+    box1: BoundingBoxComponent,
+    box2: BoundingBoxComponent
+  ): boolean {
     return (
       box1.right > box2.left &&
       box1.left < box2.right &&
@@ -53,8 +55,7 @@ export class CollisionDetectSystem extends System {
     entity1: number,
     entity2: number
   ): void {
-    world.events.emit<CollisionEvent>(COLLISION_DETECT_EVENT_NAME, {
-      type: COLLISION_DETECT_EVENT_NAME,
+    world.events.emit(COLLISION_DETECT_EVENT_NAME, {
       payload: {
         entityA: entity1,
         entityB: entity2,

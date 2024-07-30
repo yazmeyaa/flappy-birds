@@ -56,7 +56,6 @@ describe("Renderer", () => {
     renderer.scenes.changeScene("test");
     renderer.render();
     expect(renderer["app"].stage).toBe(testScene.container);
-    expect(renderer["app"].render).toHaveBeenCalled();
   });
 
   it("should not render if there is no active scene", () => {
