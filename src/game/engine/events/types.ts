@@ -21,15 +21,16 @@ export type InternalEventsMap = {
 export type KnownEvent = keyof InternalEventsMap;
 
 export interface IEventManager {
-  emit<K extends KnownEvent>(
+  emit<K extends KnownEvent | (string & {})>(
     eventName: K,
-    event: Omit<InternalEventsMap[K], "type">
+    payload: K extends KnownEvent ? InternalEventsMap[K]["payload"] : unknown
   ): void;
-  emit<T>(eventName: string, event: Omit<Event<T, string>, "type">): void;
+
   subscribe<K extends KnownEvent>(
     eventName: K,
-    cb: (event: InternalEventsMap[K]) => void
+    cb: (event: Event<InternalEventsMap[K]["payload"], K>) => void
   ): void;
+
   subscribe<T>(eventName: string, cb: (event: Event<T, string>) => void): void;
 }
 

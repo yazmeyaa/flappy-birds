@@ -56,13 +56,11 @@ export class CollisionDetectSystem extends System {
     entity2: number
   ): void {
     world.events.emit(COLLISION_DETECT_EVENT_NAME, {
-      payload: {
-        entityA: entity1,
-        entityB: entity2,
-        collisionPoint: {
-          x: 0,
-          y: 0,
-        },
+      entityA: entity1,
+      entityB: entity2,
+      collisionPoint: {
+        x: 0,
+        y: 0,
       },
     });
   }

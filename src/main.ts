@@ -99,11 +99,10 @@ class MainMenuScene extends BasicScene {
       bird.movement.acceleration.setY(0);
     });
 
-    world.events.subscribe("scene_changed", (event) => {});
-
     world.events.subscribe<CollisionPayload>(
       COLLISION_DETECT_EVENT_NAME,
       (event) => {
+        console.log(event);
         if ([event.payload.entityA, event.payload.entityB].includes(bird.id)) {
           bird.appearance.color = "orange";
           alert("Game over!!!");

@@ -1,15 +1,23 @@
-import { Event, EventListenerType, IEventManager, KnownEvent } from "./types";
+import {
+  EventListenerType,
+  IEventManager,
+  InternalEventsMap,
+  KnownEvent,
+} from "./types";
 
 export class EventManager implements IEventManager {
   private listeners: Map<string, EventListenerType<any>[]> = new Map();
 
-  public emit<T extends object>(eventName: string, event: Event<T>): void {
+  public emit<K extends KnownEvent | (string & {})>(
+    eventName: K,
+    payload: K extends KnownEvent ? InternalEventsMap[K]["payload"] : unknown
+  ): void {
     if (!this.listeners.has(eventName)) return;
 
     for (const cb of this.listeners.get(eventName)!) {
       cb({
         type: eventName,
-        payload: event.payload,
+        payload,
       });
     }
   }
